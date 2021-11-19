@@ -1,8 +1,10 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const logger = require('morgan');
 
 const signupRouter = require('./routers/signup.router');
+const signinRouter = require('./routers/signin.router');
 const usersRouter = require('./routers/users.router');
 const moviesRouter = require('./routers/movies.router');
 
@@ -15,10 +17,12 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb')
   .then(() => console.log('Connected to DB'))
   .catch((error) => console.log({ errorMessage: error.message }));
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(logger('dev'));
 
 app.use('/signup', signupRouter);
+app.use('/signin', signinRouter);
 
 app.use(authorize);
 
