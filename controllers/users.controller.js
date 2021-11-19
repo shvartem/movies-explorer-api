@@ -1,10 +1,11 @@
 const User = require('../models/user');
+const HTTP_CODES = require('../utils/http-codes');
 
 async function getMe(req, res, next) {
   try {
     const me = await User.findById({ id: req.id });
 
-    return res.status(200).json(me);
+    return res.status(HTTP_CODES.SUCCESS_CODE).json(me);
   } catch (err) {
     return next();
   }
@@ -20,7 +21,7 @@ async function updateMe(req, res, next) {
       { new: true },
     );
 
-    return res.status(200).json(updatedMe);
+    return res.status(HTTP_CODES.SUCCESS_CODE).json(updatedMe);
   } catch (err) {
     return next();
   }
