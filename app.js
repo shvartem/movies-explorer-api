@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const logger = require('morgan');
 
+const signupRouter = require('./routers/signup.router');
 const usersRouter = require('./routers/users.router');
 const moviesRouter = require('./routers/movies.router');
 
@@ -16,6 +17,9 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb')
 
 app.use(express.json());
 app.use(logger('dev'));
+
+app.use('/signup', signupRouter);
+
 app.use(authorize);
 
 app.use('/users', usersRouter);

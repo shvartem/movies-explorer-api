@@ -3,7 +3,6 @@ const HTTP_CODES = require('../utils/http-codes');
 
 async function getAllMovies(req, res, next) {
   const { _id } = req.user;
-  console.log({ _id });
   try {
     const movies = await Movie.find({ owner: _id });
 
