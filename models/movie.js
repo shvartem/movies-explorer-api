@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const { Schema, model } = mongoose;
 
@@ -26,14 +27,26 @@ const movieSchema = new Schema({
   image: {
     type: String,
     required: true,
+    validate: {
+      validator: (v) => validator.isURL(v),
+      message: (props) => `${props.value} не является ссылкой!`,
+    },
   },
   trailer: {
     type: String,
     required: true,
+    validate: {
+      validator: (v) => validator.isURL(v),
+      message: (props) => `${props.value} не является ссылкой!`,
+    },
   },
   thumbnail: {
     type: String,
     required: true,
+    validate: {
+      validator: (v) => validator.isURL(v),
+      message: (props) => `${props.value} не является ссылкой!`,
+    },
   },
   owner: {
     type: Schema.Types.ObjectId,
