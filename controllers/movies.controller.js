@@ -1,3 +1,4 @@
+const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
 const ValidationError = require('../errors/ValidationError');
 const Movie = require('../models/movie');
@@ -19,6 +20,7 @@ async function getAllMovies(req, res, next) {
 }
 
 async function addNewMovie(req, res, next) {
+  console.log(req.body);
   const {
     country,
     director,
@@ -28,11 +30,12 @@ async function addNewMovie(req, res, next) {
     image,
     trailer,
     thumbnail,
-    owner,
     movieId,
     nameRu,
     nameEn,
   } = req.body;
+  const owner = req.user._id;
+
   try {
     const movie = await Movie.create({
       country,
@@ -54,6 +57,7 @@ async function addNewMovie(req, res, next) {
       .json(movie);
   } catch (err) {
     console.error(err.name, err.message);
+
     if (err.name === 'ValidationError') {
       return next(new ValidationError('Переданы некорректные данные'));
     }
@@ -65,13 +69,21 @@ async function addNewMovie(req, res, next) {
 async function deleteMovieById(req, res, next) {
   const { _id } = req.user;
   const { movieId } = req.params;
+
   try {
-    await Movie.findOneAndDelete({ _id: movieId, owner: _id }).orFail();
+    const movie = await Movie.findById(movieId).orFail();
+    if (!movie.owner.equals(_id)) {
+      return next(new ForbiddenError('Недостаточно прав для операции'));
+    }
+
+    await Movie.deleteOne({ _id: movieId, owner: _id }).orFail();
 
     return res
       .status(HTTP_CODES.SUCCESS_CODE)
       .json({ message: 'Фильм успешно удалён' });
   } catch (err) {
+    console.error(err.name, err.message);
+
     if (err.name === 'DocumentNotFoundError') {
       return next(new NotFoundError('Карточка с фильмом не найдена'));
     }

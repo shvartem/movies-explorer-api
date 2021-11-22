@@ -10,6 +10,7 @@ async function getMe(req, res, next) {
     return res.status(HTTP_CODES.SUCCESS_CODE).json(me);
   } catch (err) {
     console.error(err.name, err.message);
+
     if (err.name === 'DocumentNotFoundError') {
       return next(new NotFoundError('Такого пользователя не существует'));
     }
@@ -23,17 +24,21 @@ async function getMe(req, res, next) {
 
 async function updateMe(req, res, next) {
   const { _id } = req.user;
-  const { name } = req.body;
+  const { name, email } = req.body;
   try {
     const updatedMe = await User.findByIdAndUpdate(
       _id,
-      { name },
-      { new: true },
+      { name, email },
+      {
+        runValidators: true,
+        new: true,
+      },
     ).orFail();
 
     return res.status(HTTP_CODES.SUCCESS_CODE).json(updatedMe);
   } catch (err) {
     console.error(err.name, err.message);
+
     if (err.name === 'DocumentNotFoundError') {
       return next(new NotFoundError('Такого пользователя не существует'));
     }
