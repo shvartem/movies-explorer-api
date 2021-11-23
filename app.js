@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
 
+const { DATABASE_NAME = 'moviesdb' } = process.env;
 const { requestLogger, errorLogger } = require('./middlewares/logger.middleware');
 
 const indexRouter = require('./routes');
@@ -16,7 +17,7 @@ const limiter = require('./middlewares/rate-limiter.middleware');
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
-mongoose.connect('mongodb://localhost:27017/moviesdb')
+mongoose.connect(`mongodb://localhost:27017/${DATABASE_NAME}`)
   .then(() => console.log('Connected to DB'))
   .catch((error) => console.log({ errorMessage: error.message }));
 
