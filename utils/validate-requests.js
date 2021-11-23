@@ -2,7 +2,7 @@ const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
 const ValidationError = require('../errors/ValidationError');
 
-const method = (value) => {
+const isUrlMethod = (value) => {
   if (!validator.isURL(value, { require_protocol: true })) {
     throw new ValidationError('Неправильный формат ссылки');
   }
@@ -38,9 +38,9 @@ const addNewMovieValidation = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.required().custom(method, 'custom validation'),
-    trailer: Joi.required().custom(method, 'custom validation'),
-    thumbnail: Joi.required().custom(method, 'custom validation'),
+    image: Joi.required().custom(isUrlMethod, 'custom validation'),
+    trailer: Joi.required().custom(isUrlMethod, 'custom validation'),
+    thumbnail: Joi.required().custom(isUrlMethod, 'custom validation'),
     movieId: Joi.number().required(),
     nameRu: Joi.string().required(),
     nameEn: Joi.string().required(),
