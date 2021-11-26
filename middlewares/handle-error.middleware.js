@@ -5,7 +5,7 @@ function handleError(err, req, res, next) {
   res
     .status(statusCode)
     .send(statusCode === HTTP_CODES.SERVER_ERROR
-      ? 'Что-то пошло не так'
+      ? { message: 'Что-то пошло не так' }
       : { message });
 
   next();

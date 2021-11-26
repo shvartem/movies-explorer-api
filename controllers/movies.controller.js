@@ -31,8 +31,8 @@ async function addNewMovie(req, res, next) {
     trailer,
     thumbnail,
     movieId,
-    nameRu,
-    nameEn,
+    nameRU,
+    nameEN,
   } = req.body;
   const owner = req.user._id;
 
@@ -48,8 +48,8 @@ async function addNewMovie(req, res, next) {
       thumbnail,
       owner,
       movieId,
-      nameRu,
-      nameEn,
+      nameRU,
+      nameEN,
     });
 
     return res

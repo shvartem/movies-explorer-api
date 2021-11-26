@@ -12,7 +12,7 @@ const isUrlMethod = (value) => {
 const newUserValidation = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    name: Joi.string().required(),
+    name: Joi.string().min(2).max(30).required(),
     password: Joi.string().required(),
   }),
 });
@@ -27,7 +27,7 @@ const loginUserValidation = celebrate({
 const updateUserValidation = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    name: Joi.string().required(),
+    name: Joi.string().min(2).max(30).required(),
   }),
 });
 
@@ -42,14 +42,14 @@ const addNewMovieValidation = celebrate({
     trailer: Joi.required().custom(isUrlMethod, 'custom validation'),
     thumbnail: Joi.required().custom(isUrlMethod, 'custom validation'),
     movieId: Joi.number().required(),
-    nameRu: Joi.string().required(),
-    nameEn: Joi.string().required(),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 
 const movieIdValidation = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().required(),
+    movieId: Joi.string().length(24).hex().required(),
   }),
 });
 

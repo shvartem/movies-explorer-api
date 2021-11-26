@@ -1,3 +1,4 @@
+const ConflictError = require('../errors/ConflictError');
 const NotFoundError = require('../errors/NotFoundError');
 const ValidationError = require('../errors/ValidationError');
 const User = require('../models/user');
@@ -13,9 +14,6 @@ async function getMe(req, res, next) {
 
     if (err.name === 'DocumentNotFoundError') {
       return next(new NotFoundError('Такого пользователя не существует'));
-    }
-    if (err.name === 'CastError') {
-      return next(new ValidationError('Переданы некорректные данные'));
     }
 
     return next(err);
@@ -44,6 +42,9 @@ async function updateMe(req, res, next) {
     }
     if (err.name === 'CastError' || err.name === 'ValidationError') {
       return next(new ValidationError('Переданы некорректные данные'));
+    }
+    if (err.name === 'MongoServerError' && err.code === 11000) {
+      return next(new ConflictError('Пользователь с таким email уже существует'));
     }
 
     return next(err);

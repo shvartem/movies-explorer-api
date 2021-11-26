@@ -6,8 +6,9 @@ const HTTP_CODES = require('../utils/http-codes');
 
 async function createUser(req, res, next) {
   const { email, name, password } = req.body;
-  const hashPassword = await bcrypt.hash(password, 10);
   try {
+    const hashPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       email,
       name,
