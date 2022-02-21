@@ -21,8 +21,9 @@ const PORT = process.env.PORT ?? 3000;
 const corsConfig = {
   credentials: true,
   origin: [
-    'http://localhost:3001',
+    'https://mesto422.nomoredomains.rocks',
     'https://api.mesto422.nomoredomains.rocks',
+    'http://localhost:3000',
   ],
 };
 
