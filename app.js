@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
+const cors = require('cors');
 
 const indexRouter = require('./routes');
 const { requestLogger, errorLogger } = require('./middlewares/logger.middleware');
@@ -17,6 +18,13 @@ const DATABASE_LINK = require('./utils/mongo-config');
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
+const corsConfig = {
+  credentials: true,
+  origin: [
+    'http://localhost:3001',
+    'https://api.mesto422.nomoredomains.rocks',
+  ],
+};
 
 mongoose.connect(DATABASE_LINK)
   .then(() => console.log('Connected to DB'))
@@ -26,6 +34,7 @@ app.use(requestLogger);
 app.use(morgan('dev'));
 app.use(limiter);
 app.use(helmet());
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(cookieParser());
 

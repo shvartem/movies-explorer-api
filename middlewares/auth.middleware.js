@@ -10,6 +10,7 @@ function authorize(req, res, next) {
 
   try {
     req.user = jwt.verify(token, TOKEN_SECRET);
+
     return next();
   } catch (err) {
     console.error(err.name, err.message);

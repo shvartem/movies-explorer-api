@@ -7,8 +7,11 @@ const HTTP_CODES = require('../utils/http-codes');
 async function getMe(req, res, next) {
   try {
     const me = await User.findById({ _id: req.user._id }).orFail();
-
-    return res.status(HTTP_CODES.SUCCESS_CODE).json(me);
+    return res.status(HTTP_CODES.SUCCESS_CODE).json({
+      _id: me._id,
+      email: me.email,
+      name: me.name,
+    });
   } catch (err) {
     console.error(err.name, err.message);
 
@@ -33,7 +36,11 @@ async function updateMe(req, res, next) {
       },
     ).orFail();
 
-    return res.status(HTTP_CODES.SUCCESS_CODE).json(updatedMe);
+    return res.status(HTTP_CODES.SUCCESS_CODE).json({
+      _id: updatedMe._id,
+      email: updatedMe.email,
+      name: updatedMe.name,
+    });
   } catch (err) {
     console.error(err.name, err.message);
 

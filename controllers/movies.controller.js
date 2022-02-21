@@ -20,7 +20,6 @@ async function getAllMovies(req, res, next) {
 }
 
 async function addNewMovie(req, res, next) {
-  console.log(req.body);
   const {
     country,
     director,
@@ -37,6 +36,12 @@ async function addNewMovie(req, res, next) {
   const owner = req.user._id;
 
   try {
+    const alreadyLiked = await Movie.findOne({ owner, movieId });
+
+    if (alreadyLiked) {
+      return next(new ValidationError('Уже добавлено в коллекцию'));
+    }
+
     const movie = await Movie.create({
       country,
       director,
